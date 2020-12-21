@@ -1,70 +1,45 @@
-# Getting Started with Create React App
+# Movie App front end
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Este proyecto se presenta cómo resultados de prueba de selección
 
-## Available Scripts
+## Pasos a seguir
 
-In the project directory, you can run:
+Descargar o clonar el proyecto y ejecutar los comandos para instalación
 
-### `yarn start`
+```
+npm install
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Una vez descargado, esto es sólo el front de un proyecto en conjunto, por lo que debe ser ejecutado al mismo tiempo que con `movie-back`
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Este proyecto contienne
 
-### `yarn test`
+- Página para Signup del usuario
+- Página para login de usuarios existentes en la base de datos
+- El token y los datos del usuario son manejados en la sesión
+- Inicion con imagen y título de películas en base de datos
+- Sección de películas donde se ven detalles
+    - Al hacer click en el botón de `Reserve`, se presenta un modal para confirmación, el cuál guarda la info en database.
+    - Si no se está logueado en sistenma, el Modal no ofrece la opción de confirmación, enviando un mensaje de que el usuario debe loguearse
+- Existe una sección para guardar imágenes, el cuál convierte el formulario y envía la imagen cómo BLOB a la base de datos.
+- En `utils` existe un archivo `Test Diagram.png` el cual es para resolver la pregunta del documento en word de qué hacer con las fechas en una base de datos.
+- El trigger solicitado no se realizó en proyecto, se presenta a continuación en el quote siguiente
+- 
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
+CREATE TRIGGER dbo.tgBackupMovies
+   ON  dbo.tbMovies
+   AFTER DELETE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
 
-### `yarn build`
+    -- Insert statements for trigger here
+	INSERT INTO dbo.tbBackup (ident, title, picture, [desc], duration, genre, time, createdAt, updatedAt)
+	SELECT ident, title, picture, [desc], duration, genre, time, createdAt, updatedAt FROM deleted
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+END
+GO
+```
